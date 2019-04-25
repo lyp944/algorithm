@@ -1,6 +1,7 @@
 # algorithm 算法
 
-###1. K-Means （K均值算法是聚类算法的一种。）###
+###1. K-Means （K均值算法是聚类算法的一种。）###.   
+
 *K-means.playground* 是 *K-Means* 算法基于Swift的一种简单实现，里边包含实现和测试。
 
 
