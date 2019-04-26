@@ -51,5 +51,16 @@ let edges:Array<Array<Int>> =  [[00,AB,AC,无,无,无,无], //A
  */
 func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String)
     -> (vertexValues:Dictionary<String,Int> , routes:Dictionary<String,Array<String>>)
+    
+    //起始点为 B 测试结果
+    [(key: "A", value: 7), (key: "B", value: 0), (key: "C", value: 5), (key: "D", value: 3), (key: "E", value: 1), (key: "F", value: 4), (key: "G", value: 8)]
+
+
+    BE -> ["B", "E"]
+    BD -> ["B", "D"]
+    BF -> ["B", "E", "F"]
+    BG -> ["B", "E", "F", "G"]
+    BC -> ["B", "D", "C"]
+    BA -> ["B", "D", "C", "A"]
 
 ```
