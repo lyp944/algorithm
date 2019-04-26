@@ -31,14 +31,14 @@ let A = "A",B="B",C="C",D="D",E="E",F="F",G="G"
 let AB = 9,AC = 2,BC = 6,BD = 3,BE = 1,CD = 2,CF = 9,DE = 5,DF = 6,EF = 3,EG = 7,FG = 4
 
 let vertexs:Array = [A,B,C,D,E,F,G]
-					//A  B  C  D  E  F  G
-let edges:Array<Array<Int>> = [[00,AB,AC,无,无,无,无], //A
-					 [AB,00,BC,BD,BE,无,无],//B
-					 [AC,BC,00,CD,无,CF,无],//C
-					 [无,BD,CD,00,DE,DF,无],//D
-					 [无,BE,无,DE,00,EF,EG],//E
-					 [无,无,CF,DF,EF,00,FG],//F
-					 [无,无,无,无,EG,FG,00]] //G
+                    //A  B  C  D  E  F  G
+let edges:Array<Array<Int>> =  [[00,AB,AC,无,无,无,无], //A
+                                [AB,00,BC,BD,BE,无,无],//B
+                                [AC,BC,00,CD,无,CF,无],//C
+                                [无,BD,CD,00,DE,DF,无],//D
+                                [无,BE,无,DE,00,EF,EG],//E
+                                [无,无,CF,DF,EF,00,FG],//F
+                                [无,无,无,无,EG,FG,00]] //G
 /*
  vertexs:Array<String> 点的数组
  edges:Array<Array<Int>> 点组成的网的矩阵 二维数组
