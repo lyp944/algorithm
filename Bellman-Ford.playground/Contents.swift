@@ -18,11 +18,15 @@
 
 import UIKit
 
-//定点定义
+//负闭环
+enum BellmanFordError :Error {
+    case NegativeClosedCycle(String) //负闭环
+}
+//点定义
 let 无 = Int.max //代表无穷
 let A = "A",B="B",C="C",D="D",E="E",F="F",G="G"
 
-let AB = 9,AC = 2,BC = 6,BD = 3,BE = 1,CD = 2,CF = 9,DE = 5,DF = 6,EF = 3,EG = 7,FG = 4
+let AB = 9,AC = 2,BC = 6,BD = -3,BE = 1,CD = 2,CF = 9,DE = 5,DF = 6,EF = 3,EG = 7,FG = 4
 
 let vertexs:Array = [A,B,C,D,E,F,G]
                               //A  B  C  D  E  F  G
@@ -43,14 +47,15 @@ let edges:Array<Array<Int>> = [[00,AB,AC,无,无,无,无], //A
  vertexValues: 起始点到达所有点消耗组成的数组
  routes: 起始点到达所有点最优路径的字典
  */
-func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String)
+func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) throws
     -> (vertexValues:Dictionary<String,Int> , routes:Dictionary<String,Array<String>>) {
     
     //检验edges是否为 vertexs.count *  vertexs.count 的方矩阵！
     var isLegal = (vertexs.count == edges.count)
+    let vertexCount = vertexs.count
     
     for e in edges {
-        if e.count != vertexs.count {
+        if e.count != vertexCount {
             isLegal = false
             break
         }
@@ -120,9 +125,18 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String)
                     let toRouteKey:String =  from + toVertex
                     
                     var routeLine = routes[fromRouteKey] ?? [fromVertex] //默认值第一位为起始点from
+                    
+
+                    
                     routeLine.append(toVertex)
                     routes[toRouteKey] = routeLine
                     
+
+                    //检测负路径
+                    if repeatTimes >= vertexCount-1 {
+                        //存在负闭环
+                        throw BellmanFordError.NegativeClosedCycle(routes.description)
+                    }
                     
                     //log 每一次路径的更新
 //                    for (_,e) in routes.enumerated() {
@@ -152,16 +166,30 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String)
 }
 
 //testA
-let (vertexValues,routes) = BellmanFord(vertexs: vertexs, edges: edges, from:B)
 
-//log from点 到 其他点 的最短值（最短路径值）
-print("\n")
-print(vertexValues.sorted(by: { (a, b) -> Bool in
-    return a.key < b.key
-}))
 
-//log from点 到 其他点 的路径方法
-print("\n")
-for (_,e) in routes.enumerated() {
-    print("\(e.key) -> \(e.value)")
+
+var result:(vertexValues:Dictionary<String,Int> , routes:Dictionary<String,Array<String>>)?
+
+do {
+    result = try BellmanFord(vertexs: vertexs, edges: edges, from:B)
+} catch BellmanFordError.NegativeClosedCycle(let desc) {
+    print("BellmanFordError.NegativeClosedCycle 重复路径为负环:\n\(desc)")
 }
+print("\n")
+
+if let result = result {
+    
+    //log from点 到 其他点 的最短值（最短路径值）
+    print(result.vertexValues.sorted(by: { (a, b) -> Bool in
+        return a.key < b.key
+    }))
+        
+    //log from点 到 其他点 的路径方法
+    print("\n")
+    for (_,e) in result.routes.enumerated() {
+        print("\(e.key) -> \(e.value)")
+    }
+}
+
+
