@@ -29,7 +29,7 @@ func KMeans(centers:Array<CGPoint> ,
             case NegativeClosedCycle(String) //负闭环
     }
     //点定义
-    let 🚫 = Int.max //代表🚫穷
+    let 🚫 = Int.max //代表无穷，不可达
     let A = "A",B="B",C="C",D="D",E="E",F="F",G="G"
 
     let AB = 9,AC = 2,BC = 6,BD = -3,BE = 1,CD = 2,CF = 9,DE = 5,DF = 6,EF = 3,EG = 7,FG = 4
@@ -69,7 +69,9 @@ func KMeans(centers:Array<CGPoint> ,
 
 ```
 
+
 ### 3. Dijkstras （戴克斯特拉算法 本程序实现的是戴克斯特拉算法的一种变种 查找图中起始点到个点的最短路径)
+
 
     ```swift
     //负权重
