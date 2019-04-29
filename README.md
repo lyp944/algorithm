@@ -72,8 +72,7 @@ func KMeans(centers:Array<CGPoint> ,
 
 ### 3. Dijkstras （戴克斯特拉算法 本程序实现的是戴克斯特拉算法的一种变种 查找图中起始点到个点的最短路径)
 
-
-    ```swift
+```swift
     //负权重
     enum DijkstraError :Error {
         case NegativeWeight(String) //负权重
