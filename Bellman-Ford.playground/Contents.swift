@@ -23,20 +23,23 @@ enum BellmanFordError :Error {
     case NegativeClosedCycle(String) //负闭环
 }
 //点定义
-let 无 = Int.max //代表无穷
+let 🚫 = Int.max //代表无穷
 let A = "A",B="B",C="C",D="D",E="E",F="F",G="G"
 
-let AB = 9,AC = 2,BC = 6,BD = -3,BE = 1,CD = 2,CF = 9,DE = 5,DF = 6,EF = 3,EG = 7,FG = 4
+//定义边
+let AB = 9,AC = 2,BC = 6,BD = 3,BE = 1,CD = 2,CF = 9,DE = 5,DF = 6,EF = 3,EG = 7,FG = 4
 
 let vertexs:Array = [A,B,C,D,E,F,G]
+
+//矩阵
                               //A  B  C  D  E  F  G
-let edges:Array<Array<Int>> = [[00,AB,AC,无,无,无,无], //A
-                               [AB,00,BC,BD,BE,无,无],//B
-                               [AC,BC,00,CD,无,CF,无],//C
-                               [无,BD,CD,00,DE,DF,无],//D
-                               [无,BE,无,DE,00,EF,EG],//E
-                               [无,无,CF,DF,EF,00,FG],//F
-                               [无,无,无,无,EG,FG,00]] //G
+let edges:Array<Array<Int>> = [[00,AB,AC,🚫,🚫,🚫,🚫], //A
+                               [AB,00,BC,BD,BE,🚫,🚫],//B
+                               [AC,BC,00,CD,🚫,CF,🚫],//C
+                               [🚫,BD,CD,00,DE,DF,🚫],//D
+                               [🚫,BE,🚫,DE,00,EF,EG],//E
+                               [🚫,🚫,CF,DF,EF,00,FG],//F
+                               [🚫,🚫,🚫,🚫,EG,FG,00]] //G
 /*
  vertexs:Array<String> 点的数组
  edges:Array<Array<Int>> 点组成的网的矩阵 二维数组
@@ -67,7 +70,7 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) thro
     //起始点初始化为0，其他为无穷大
     var vertexValues = Dictionary<String,Int>()
     for vertex in vertexs {
-        vertexValues[vertex] = 无
+        vertexValues[vertex] = 🚫
     }
     vertexValues[from] = 0
 
@@ -87,7 +90,7 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) thro
         for (i,fromVertex) in vertexs.enumerated() {
             
             let edge = edges[i]
-            let fromVertexValue:Int! = vertexValues[fromVertex]
+            let fromVertexValue:Int! = vertexValues[fromVertex] //起始点的值
             
             for (j,toVertexWeight) in edge.enumerated() {
                 
@@ -98,13 +101,13 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) thro
                     continue
                 }
                 
-                
+                //next点的值
                 let toVertexValue : Int! = vertexValues[toVertex]
 
-                if toVertexWeight >= 无 || fromVertexValue >= 无 {
-                    /*1.不能直达的点略过
+                if toVertexWeight >= 🚫 || fromVertexValue >= 🚫 {
+                    /*1.不能直达的next点略过
                         或
-                      2.起始点为无穷无法计算略过*/
+                      2.current点为无穷无法计算略过*/
                     continue
                 }else if (fromVertexValue + toVertexWeight > toVertexValue) {
                     //1.路径长度增加略过
@@ -114,10 +117,11 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) thro
                     
                     if let oldVertexValue = vertexValues[toVertex],
                         oldVertexValue > fromVertexValue + toVertexWeight {
-                        //有值更新需要repeat一次确认是否是最优解
+                        //只要有值更新需要repeat一次确认是否是最优解
                         success = false
                     }
                     
+                    //next点的值
                     vertexValues[toVertex] = fromVertexValue + toVertexWeight
 
                     //记录路径
@@ -125,8 +129,6 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) thro
                     let toRouteKey:String =  from + toVertex
                     
                     var routeLine = routes[fromRouteKey] ?? [fromVertex] //默认值第一位为起始点from
-                    
-
                     
                     routeLine.append(toVertex)
                     routes[toRouteKey] = routeLine
@@ -165,14 +167,13 @@ func BellmanFord(vertexs:Array<String>,edges:Array<Array<Int>>,from:String) thro
     return (vertexValues,routes)
 }
 
-//testA
 
-
+//test
 
 var result:(vertexValues:Dictionary<String,Int> , routes:Dictionary<String,Array<String>>)?
 
 do {
-    result = try BellmanFord(vertexs: vertexs, edges: edges, from:B)
+    result = try BellmanFord(vertexs: vertexs, edges: edges, from:A)
 } catch BellmanFordError.NegativeClosedCycle(let desc) {
     print("BellmanFordError.NegativeClosedCycle 重复路径为负环:\n\(desc)")
 }
